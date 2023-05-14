@@ -1,40 +1,46 @@
 import './style.css';
 
 export default class Minesweeper {
-  constructor(container) {
+  constructor(container, rows, cols) {
     this.container = container;
     this.counter = 0;
     this.duration = 0;
     this.boardData = [];
+    this.rows = rows;
+    this.cols = cols;
   }
 
-  generateBoardData = (rows, cols) => {
+  generateBoardData = () => {
     const board = [];
 
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < this.rows; i++) {
       const row = [];
 
-      for (let j = 0; j < cols; j++) {
+      for (let j = 0; j < this.cols; j++) {
         row.push(0);
       }
 
       board.push(row);
     }
 
-    const numMines = Math.floor(rows * cols * 0.1);
+    return board;
+  }
+
+  addMinesToBoardData = (firstMoveRow, firstMoveCol) => {
+    const numMines = Math.floor(this.rows * this.cols * 0.1);
     let minesPlaced = 0;
 
     while (minesPlaced < numMines) {
-      const randomRow = Math.floor(Math.random() * rows);
-      const randomCol = Math.floor(Math.random() * cols);
+      const randomRow = Math.floor(Math.random() * this.rows);
+      const randomCol = Math.floor(Math.random() * this.cols);
 
-      if (board[randomRow][randomCol] !== 1) {
-        board[randomRow][randomCol] = 1;
+      if (firstMoveRow !== randomRow && 
+          firstMoveCol !== randomCol && 
+          this.boardData[randomRow][randomCol] !== 1) {
+        this.boardData[randomRow][randomCol] = 1;
         minesPlaced++;
       }
     }
-
-    return board;
   }
 
   updateCounter = () => {
@@ -43,9 +49,15 @@ export default class Minesweeper {
   }
 
   checkCell = (row, col) => {
-    if (this.boardData[row][col] === 1) {
+    if (this.boardData[row] && this.boardData[row][col] === 1) {
       return 'mine';
     } else {
+      this.counter++;
+
+      if (this.counter === 1) {
+        this.addMinesToBoardData();
+      }
+
       let minesQty = 0;
 
       for (let i = Number(row) - 1; i <= Number(row) + 1; i++) {
@@ -56,15 +68,73 @@ export default class Minesweeper {
         }
       }
 
-      this.counter++;
       this.updateCounter();
       
       if (this.counter === (this.boardData[0].length * this.boardData.length - 10)) {
         this.success = true;
+        this.revealBoard();
         this.endGame();
       }
 
       return minesQty;
+    }
+  }
+
+  chooseColorForNumber = (number) => {
+    switch(number) {
+      case 1: 
+        return 'blue';
+      case 2: 
+        return 'green';
+      case 3:
+        return 'darkgoldenrod';
+      case 4:
+        return 'violet';
+      case 5:
+        return 'red';
+      case 6: 
+        return 'darkslateblue';
+      case 7:
+        return 'black';
+      case 8:
+        return 'coral'
+      default: 
+        return 'red';
+    }
+  }
+
+  revealBoard = () => {
+    for (let i = 0; i < this.boardData.length; i++) {
+      for (let j = 0; j < this.boardData[i].length; j++) {
+        let row = i;
+        let col = j;
+        const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+
+        if (this.boardData[i] && this.boardData[i][j] === 1) {
+          cell.innerHTML = '&#x1F4A3;';
+        } else {
+          let minesQty = 0;
+          
+          for (let i = Number(row) - 1; i <= Number(row) + 1; i++) {
+            for (let j = Number(col) - 1; j <= Number(col) + 1; j++) {
+              if (this.boardData[i] && this.boardData[i][j] && this.boardData[i][j] === 1) {
+                minesQty++;
+              }
+            }
+          }
+  
+          if (minesQty > 0) {
+            cell.innerHTML = minesQty;
+            cell.style.color = this.chooseColorForNumber(minesQty);
+            cell.disabled = true;
+          } else {
+            cell.disabled = true;
+            cell.innerHTML = '';
+          }
+        }
+
+        cell.classList.add('opened');
+      }
     }
   }
 
@@ -120,26 +190,49 @@ export default class Minesweeper {
 
     this.board.addEventListener('click', (event) => {
       const cell = event.target;
-      cell.classList.add('opened');
 
+      if (cell !== this.board) {
+        cell.classList.add('opened');
+      }
+      
       const { row, col } = cell.dataset;
       const result = this.checkCell(row, col);
 
       if (result === 'mine') {
         cell.classList.add('mine');
+        cell.innerHTML = '&#x1F4A3;';
         this.success = false;
         this.endGame();
+        this.revealBoard();
       } else if (result > 0) {
-        cell.innerText = result;
+        cell.innerHTML = result;
+        cell.style.color = this.chooseColorForNumber(result);
         cell.disabled = true;
       } else {
         cell.disabled = true;
+        cell.innerHTML = '';
       }
+    });
+
+    this.board.addEventListener('contextmenu', (event) => {
+      event.preventDefault();
+      const cell = event.target;
+      
+        if (!cell.disabled) {
+          if (cell.dataset.mine) {
+            cell.removeAttribute('data-mine');
+            cell.innerHTML = '';
+            console.log(cell.dataset.mine)
+          } else {
+            cell.setAttribute('data-mine', true);
+            cell.innerHTML = '&#x1F6A9;';
+          }
+        }
     });
   }
 
   start = () => {
-    this.boardData = this.generateBoardData(10, 10);
+    this.boardData = this.generateBoardData();
     this.render();
     const duration = this.container.querySelector('.duration');
     

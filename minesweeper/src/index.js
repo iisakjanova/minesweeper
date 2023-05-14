@@ -12,5 +12,5 @@ const container = document.createElement('div');
 container.className = 'container';
 body.append(container);
 
-const minesweeper = new Minesweeper(container);
+const minesweeper = new Minesweeper(container, 10, 10);
 minesweeper.start();

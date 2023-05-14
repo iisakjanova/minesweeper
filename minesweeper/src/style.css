@@ -27,3 +27,7 @@
 .message {
   height: 20px;
 }
+
+.cell:disabled {
+  color: black;
+}
