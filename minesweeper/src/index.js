@@ -8,9 +8,26 @@ title.className = 'title';
 title.innerText = 'Minesweeper'
 body.append(title);
 
+const startBtn = document.createElement('button');
+startBtn.innerText = 'new';
+body.append(startBtn);
+
 const container = document.createElement('div');
 container.className = 'container';
 body.append(container);
 
-const minesweeper = new Minesweeper(container, 10, 10);
+let minesweeper;
+
+startBtn.addEventListener('click', () => {
+  if (minesweeper) {
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+  }
+
+  minesweeper = new Minesweeper(container, 10, 10);
+  minesweeper.start();
+});
+
+minesweeper = new Minesweeper(container, 10, 10);
 minesweeper.start();
