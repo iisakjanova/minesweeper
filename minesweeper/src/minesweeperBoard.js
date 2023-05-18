@@ -1,13 +1,14 @@
 import './style.css';
 
 export default class Minesweeper {
-  constructor(container, rows, cols) {
+  constructor(container, rows, cols, mines) {
     this.container = container;
     this.counter = 0;
     this.duration = 0;
     this.boardData = [];
     this.rows = rows;
     this.cols = cols;
+    this.minesQty = mines || 10;
     this.openedCells = 0;
     this.flaggedMines = 0;
   }
@@ -29,10 +30,9 @@ export default class Minesweeper {
   }
 
   addMinesToBoardData = (firstMoveRow, firstMoveCol) => {
-    const numMines = Math.floor(this.rows * this.cols * 0.1);
     let minesPlaced = 0;
 
-    while (minesPlaced < numMines) {
+    while (minesPlaced < this.minesQty) {
       const randomRow = Math.floor(Math.random() * this.rows);
       const randomCol = Math.floor(Math.random() * this.cols);
 
@@ -130,7 +130,9 @@ export default class Minesweeper {
       cell.innerHTML = '';
     }
 
-    if (result !== 'mine' && this.openedCells === (this.boardData[0].length * this.boardData.length - 10)) {
+    const cellsQtyToOpen = this.boardData[0].length * this.boardData.length - this.minesQty;
+
+    if (result !== 'mine' && this.openedCells === cellsQtyToOpen) {
       this.success = true;
       this.revealBoard();
       this.endGame();
@@ -239,29 +241,48 @@ export default class Minesweeper {
     this.board = document.createElement('div');
     this.board.className = 'board';
 
+    const maxWidth = `${(this.rows * 50).toString()}px`;
+    this.container.style.setProperty('max-width', maxWidth);
+  
+    const infoEl = document.createElement('div');
+    infoEl.className = 'info';
+    this.container.append(infoEl);
+
     const counter = document.createElement('p');
     counter.className = 'counter';
     counter.innerText = `Moves: ${this.counter}`;
-    this.container.append(counter);
-
-    const durationEl = document.createElement('p');
-    durationEl.className = 'duration';
-    durationEl.innerText = 'Duration: 0';
-    this.container.append(durationEl);
+    infoEl.append(counter);
 
     const message = document.createElement('p');
     message.className = 'message';
     message.innerText = '';
-    this.container.prepend(message);
+
+    if (this.success) {
+      message.style.setProperty('color', 'green');
+    } else {
+      message.style.setProperty('color', 'red');
+    }
+
+    infoEl.append(message);
+
+    const durationEl = document.createElement('p');
+    durationEl.className = 'duration';
+    durationEl.innerText = 'Duration: 0';
+    infoEl.append(durationEl);
 
     for (let i = 0; i < this.boardData.length; i++) {
+      const row = document.createElement('div');
+      row.className = 'row';
+
       for (let j = 0; j < this.boardData[i].length; j++) {
         const cell = document.createElement('button');
         cell.className = 'cell';
         cell.setAttribute('data-row', i);
         cell.setAttribute('data-col', j);
-        this.board.append(cell);
+        row.append(cell);
       }
+
+      this.board.append(row);
     }
 
     this.container.append(this.board);
@@ -290,7 +311,7 @@ export default class Minesweeper {
             cell.removeAttribute('data-mine');
             cell.innerHTML = '';
             this.flaggedMines--;
-          } else if (this.flaggedMines < 10) {
+          } else if (this.flaggedMines < this.minesQty) {
             cell.setAttribute('data-mine', true);
             cell.innerHTML = '&#x1F6A9;';
             this.flaggedMines++;

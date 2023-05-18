@@ -9,7 +9,8 @@ title.innerText = 'Minesweeper'
 body.append(title);
 
 const startBtn = document.createElement('button');
-startBtn.innerText = 'new';
+startBtn.innerHTML = 'play';
+startBtn.className = 'start-btn';
 body.append(startBtn);
 
 const container = document.createElement('div');
@@ -25,9 +26,9 @@ startBtn.addEventListener('click', () => {
     }
   }
 
-  minesweeper = new Minesweeper(container, 10, 10);
+  minesweeper = new Minesweeper(container, 10, 10, 10);
   minesweeper.start();
 });
 
-minesweeper = new Minesweeper(container, 10, 10);
+minesweeper = new Minesweeper(container, 10, 10, 10);
 minesweeper.start();
