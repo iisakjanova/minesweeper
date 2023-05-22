@@ -91,6 +91,10 @@ export default class Minesweeper {
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
     const isOpen = cell && cell.disabled;
 
+    if (cell.dataset.mine) {
+      return;
+    }
+
     if (isOpen) {
       return;
     }
