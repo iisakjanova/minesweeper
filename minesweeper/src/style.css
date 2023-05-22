@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+#page {
+  margin-bottom: 50px;
+}
+
+.dark-mode {
+  background: #444444;
+  color: white;
+}
+
 .title {
   text-align: center;
 }
@@ -21,8 +30,17 @@
   width: 100px;
 }
 
+.dark-mode .start-btn {
+  background: linear-gradient(to bottom right, #0000CD, #000080);
+  color: white;
+}
+
 .start-btn:hover {
   background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
+}
+
+.dark-mode .start-btn:hover {
+  background: linear-gradient(to top left,#0000CD, #000080);
 }
 
 .settings-game-form {
@@ -39,8 +57,15 @@
   justify-content: space-between;
 }
 
-.settings-input {
+.settings-input,
+.switch-color-select {
   border: 1px solid #8bc6f9;
+}
+
+.dark-mode .settings-input,
+.dark-mode .switch-color-select {
+  background: transparent;
+  color: white;
 }
 
 .settings-btn {
@@ -49,8 +74,17 @@
   border-radius: 2px;
 }
 
+.dark-mode .settings-btn {
+  background: linear-gradient(to bottom right, #0000CD, #000080);
+  color: white;
+}
+
 .settings-btn:hover {
   background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
+}
+
+.dark-mode .settings-btn:hover {
+  background: linear-gradient(to top left,#0000CD, #000080);
 }
 
 .info {
@@ -82,11 +116,14 @@
   max-width: 50px;
   background: radial-gradient(circle at center, #C7E9FF, #A4D4FF);
   aspect-ratio: 1/1;
-  border: transparent;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); 
   transition: box-shadow 0.3s ease;
   border: 1px solid #8bc6f9;
   padding: 0;
+}
+
+.dark-mode .cell {
+  background: radial-gradient(circle at center, #0000CD, #000080);
 }
 
 .cell:hover:not(:disabled){
@@ -94,8 +131,18 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
+.dark-mode .cell:hover:not(:disabled){
+  background: radial-gradient(circle at center, #000080, #0000CD);
+}
+
 .opened {
   background: #b4d6f0;
+  box-shadow: none;
+  border: 1px solid #8bc6f9;
+}
+
+.dark-mode .opened {
+  background: #0471c4;
   box-shadow: none;
   border: 1px solid #8bc6f9;
 }
@@ -111,4 +158,14 @@
 
 .cell:disabled {
   color: black;
+}
+
+.switch-color-label {
+  text-align: center;
+}
+
+.switch-color-select {
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
 }

@@ -1,6 +1,11 @@
 import './style.css';
 import Minesweeper from './minesweeperBoard';
 
+let minesweeper;
+let size = 10;
+let minesQty = 10;
+let mode = 'light';
+
 const body = document.getElementById('page');
 
 const title = document.createElement('h1');
@@ -69,7 +74,7 @@ settingsGameForm.append(minesQtyEl);
 
 const btnSettingsGameForm = document.createElement('button');
 btnSettingsGameForm.className = 'settings-btn';
-btnSettingsGameForm.innerHTML = 'save';
+btnSettingsGameForm.innerHTML = 'ok';
 settingsGameForm.append(btnSettingsGameForm);
 
 gameModePart.append(settingsGameForm);
@@ -78,9 +83,33 @@ const container = document.createElement('div');
 container.className = 'container';
 body.append(container);
 
-let minesweeper;
-let size = 10;
-let minesQty = 10;
+const switchColorModeLabel = document.createElement('p');
+switchColorModeLabel.className = 'switch-color-label';
+switchColorModeLabel.innerHTML = 'Choose color theme';
+body.append(switchColorModeLabel);
+
+const switchColorModeSelect = document.createElement('select');
+switchColorModeSelect.className = 'switch-color-select'
+const lightOption = document.createElement('option');
+lightOption.value = 'light';
+lightOption.innerText = 'light';
+switchColorModeSelect.append(lightOption);
+const darkOption = document.createElement('option');
+darkOption.value = 'dark';
+darkOption.innerText = 'dark';
+switchColorModeSelect.append(darkOption);
+body.append(switchColorModeSelect);
+
+switchColorModeSelect.addEventListener('change', (event) => {
+  mode = event.target.value;
+
+  if (mode === 'dark') {
+    body.classList.add('dark-mode');
+  } else {
+    body.classList.remove('dark-mode');
+  }
+  
+});
 
 startBtn.addEventListener('click', () => {
   if (minesweeper) {

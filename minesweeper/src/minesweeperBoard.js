@@ -175,7 +175,7 @@ export default class Minesweeper {
       case 1: 
         return 'blue';
       case 2: 
-        return 'green';
+        return 'yellow';
       case 3:
         return 'darkgoldenrod';
       case 4:
@@ -305,6 +305,18 @@ export default class Minesweeper {
         cell.setAttribute('data-row', i);
         cell.setAttribute('data-col', j);
         row.append(cell);
+
+        // if (this.mode === 'dark') {
+        //   cell.style.setProperty('background', 'radial-gradient(circle at center, #0000CD, #000080)');
+
+        //   cell.addEventListener('mouseover', () => {
+        //     cell.style.setProperty('background', 'radial-gradient(circle at center, #000080, #0000CD)');
+        //   });
+          
+        //   cell.addEventListener('mouseout', () => {
+        //     cell.style.setProperty('background', 'radial-gradient(circle at center, #0000CD, #000080)');
+        //   });
+        // }
       }
 
       this.board.append(row);
