@@ -11,6 +11,7 @@ export default class Minesweeper {
     this.minesQty = mines;
     this.openedCells = 0;
     this.flaggedMines = 0;
+    this.minesRemaining = mines;
   }
 
   generateBoardData = () => {
@@ -260,10 +261,19 @@ export default class Minesweeper {
     infoEl.className = 'info';
     this.container.append(infoEl);
 
-    const counter = document.createElement('p');
-    counter.className = 'counter';
-    counter.innerText = `Moves: ${this.counter}`;
-    infoEl.append(counter);
+    const gameStatLeftCol = document.createElement('div');
+    gameStatLeftCol.className = 'game-stat-col';
+    infoEl.append(gameStatLeftCol);
+
+    const cellsFlagged = document.createElement('p');
+    cellsFlagged.className = 'flagged-cells';
+    cellsFlagged.innerText = `Cells flagged: ${this.flaggedMines}`;
+    gameStatLeftCol.append(cellsFlagged);
+
+    const minesRemainingEl = document.createElement('p');
+    minesRemainingEl.className = 'mines-remaining';
+    minesRemainingEl.innerText = `Mines remaining: ${this.minesRemaining}`;
+    gameStatLeftCol.append(minesRemainingEl);
 
     const message = document.createElement('p');
     message.className = 'message';
@@ -271,10 +281,19 @@ export default class Minesweeper {
 
     infoEl.append(message);
 
+    const gameStatRightCol = document.createElement('div');
+    gameStatRightCol.className = 'game-stat-col';
+    infoEl.append(gameStatRightCol);
+
+    const counter = document.createElement('p');
+    counter.className = 'counter';
+    counter.innerText = `Moves: ${this.counter}`;
+    gameStatRightCol.append(counter);
+
     const durationEl = document.createElement('p');
     durationEl.className = 'duration';
     durationEl.innerText = 'Duration: 0';
-    infoEl.append(durationEl);
+    gameStatRightCol.append(durationEl);
 
     for (let i = 0; i < this.boardData.length; i++) {
       const row = document.createElement('div');
@@ -296,7 +315,12 @@ export default class Minesweeper {
     this.board.addEventListener('click', (event) => {
       const cell = event.target;
 
-      const { row, col } = cell.dataset;
+      const { row, col, mine } = cell.dataset;
+
+      if (mine) {
+        return;
+      }
+
       const result = this.makeMove(row, col);
 
       if (cell && cell.classList.contains('cell')) {
@@ -312,6 +336,9 @@ export default class Minesweeper {
 
     this.board.addEventListener('contextmenu', (event) => {
       event.preventDefault();
+      const cellsFlaggedEl = document.querySelector('.flagged-cells');
+      const minesRemainingEl = document.querySelector('.mines-remaining');
+
       const cell = event.target;
       
         if (!cell.disabled) {
@@ -319,11 +346,17 @@ export default class Minesweeper {
             cell.removeAttribute('data-mine');
             cell.innerHTML = '';
             this.flaggedMines--;
+            this.minesRemaining++;
+
           } else if (this.flaggedMines < this.minesQty) {
             cell.setAttribute('data-mine', true);
             cell.innerHTML = '&#x1F6A9;';
             this.flaggedMines++;
+            this.minesRemaining--;
           }
+
+          minesRemainingEl.innerText = `Mines remaining: ${this.minesRemaining}`;
+          cellsFlaggedEl.innerText = `Cells flagged: ${this.flaggedMines}`;
         }
     });
   }
