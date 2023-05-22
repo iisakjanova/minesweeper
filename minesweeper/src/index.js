@@ -5,6 +5,7 @@ let minesweeper;
 let size = 10;
 let minesQty = 10;
 let mode = 'light';
+let isSoundOn = true;
 
 const body = document.getElementById('page');
 
@@ -100,6 +101,10 @@ darkOption.innerText = 'dark';
 switchColorModeSelect.append(darkOption);
 body.append(switchColorModeSelect);
 
+const soundOnBtn = document.createElement('button');
+soundOnBtn.innerHTML = 'sound on';
+body.append(soundOnBtn);
+
 switchColorModeSelect.addEventListener('change', (event) => {
   mode = event.target.value;
 
@@ -111,6 +116,24 @@ switchColorModeSelect.addEventListener('change', (event) => {
   
 });
 
+soundOnBtn.addEventListener('click', () => {
+  isSoundOn = !isSoundOn;
+
+  if (soundOnBtn.innerHTML === 'sound on') {
+    soundOnBtn.innerHTML = 'sound off';
+  } else {
+    soundOnBtn.innerHTML = 'sound on';
+  }
+
+  if (minesweeper) {
+    container.innerHTML = '';
+  }
+
+  minesweeper = new Minesweeper(container, size, size, minesQty, isSoundOn);
+  minesweeper.start();
+  
+});
+
 startBtn.addEventListener('click', () => {
   if (minesweeper) {
     while (container.firstChild) {
@@ -118,7 +141,7 @@ startBtn.addEventListener('click', () => {
     }
   }
 
-  minesweeper = new Minesweeper(container, size, size, minesQty);
+  minesweeper = new Minesweeper(container, size, size, minesQty, isSoundOn);
   minesweeper.start();
 });
 
@@ -145,10 +168,10 @@ settingsGameForm.addEventListener('submit', (event) => {
     container.innerHTML = '';
   }
 
-  minesweeper = new Minesweeper(container, size, size, minesQty);
+  minesweeper = new Minesweeper(container, size, size, minesQty, isSoundOn);
   minesweeper.start();
   
 });
 
-minesweeper = new Minesweeper(container, 10, 10, 10);
+minesweeper = new Minesweeper(container, 10, 10, 10, isSoundOn);
 minesweeper.start();

@@ -23,6 +23,18 @@ module.exports = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        test: /\.(mp3|wav)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets'
+            }
+          }
+        ]
+      }
     ],
   },
   devtool: 'source-map', // Generate source maps for easier debugging
