@@ -8,7 +8,7 @@ export default class Minesweeper {
     this.boardData = [];
     this.rows = rows;
     this.cols = cols;
-    this.minesQty = mines || 10;
+    this.minesQty = mines;
     this.openedCells = 0;
     this.flaggedMines = 0;
   }
@@ -68,6 +68,10 @@ export default class Minesweeper {
   }
 
   openCellIfEmpty = (rowStr, colStr) => {
+    if (isNaN(rowStr) || isNaN(colStr)) {
+      return;
+    }
+    
     const row = Number(rowStr);
     const col = Number(colStr);
 
@@ -75,27 +79,30 @@ export default class Minesweeper {
       return;
     }
 
-    if (col < 0 || col > this.boardData[row].length - 1) {
+    if (col < 0 || col > this.boardData[row]?.length - 1) {
       return;
     }
 
-    if (this.boardData[row][col] === 1) {
+    if (this.boardData[row] && this.boardData[row][col] === 1) {
       return;
     }
 
     const cell = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
-    const isOpen = cell.disabled;
+    const isOpen = cell && cell.disabled;
 
     if (isOpen) {
       return;
     }
+
     const result = this.checkCell(row, col);
 
     if (result === 'mine') {
       return;
     }
 
-    this.openCell(cell, result);
+    if (cell && cell.classList.contains('cell')) {
+      this.openCell(cell, result);
+    }
 
     if (result === 0) {
       this.openCellIfEmpty(row - 1, col);
@@ -112,9 +119,11 @@ export default class Minesweeper {
   }
 
   openCell = (cell, result) => {
-    cell.classList.add('opened');
-
-    if (!cell.disabled) {
+    if (cell) {
+      cell.classList.add('opened');
+    }
+    
+    if (!cell?.disabled) {
       this.openedCells++;
     }
     
@@ -218,9 +227,10 @@ export default class Minesweeper {
     }
   }
 
-  showMessage = (text) => {
+  showMessage = (text, color) => {
     const message = document.querySelector('.message');
     message.innerText = text;
+    message.style.setProperty('color', color);
   }
 
   endGame = () => {
@@ -232,9 +242,11 @@ export default class Minesweeper {
 
     clearInterval(this.interval);
     const message = this.success ? 
-      `Hooray! You found all mines in ${this.duration} seconds and ${this.counter} moves!` : 
+      `Hooray! You found all mines in \n${this.duration} seconds and ${this.counter} moves!` : 
       'Game over. Try again.';
-    this.showMessage(message);
+
+    const messageColor = this.success ? 'green' : 'red';
+    this.showMessage(message, messageColor);
   }
 
   render = () => {
@@ -256,12 +268,6 @@ export default class Minesweeper {
     const message = document.createElement('p');
     message.className = 'message';
     message.innerText = '';
-
-    if (this.success) {
-      message.style.setProperty('color', 'green');
-    } else {
-      message.style.setProperty('color', 'red');
-    }
 
     infoEl.append(message);
 
@@ -293,8 +299,10 @@ export default class Minesweeper {
       const { row, col } = cell.dataset;
       const result = this.makeMove(row, col);
 
-      this.openCell(cell, result);
-
+      if (cell && cell.classList.contains('cell')) {
+        this.openCell(cell, result);
+      }
+      
       if (result === 'mine') {
         this.success = false;
         this.endGame();

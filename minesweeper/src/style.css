@@ -8,9 +8,12 @@
   text-align: center;
 }
 
+.game-mode-part {
+  display: flex;
+  justify-content: space-between;
+}
+
 .start-btn {
-  display: block;
-  margin: 0 auto;
   background: linear-gradient(to bottom right, #C7E9FF, #A4D4FF);
   border: #A4D4FF;
   border-radius: 2px;
@@ -19,6 +22,34 @@
 }
 
 .start-btn:hover {
+  background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
+}
+
+.settings-game-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-label {
+  align-self: center;
+}
+
+.settings-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.settings-input {
+  border: 1px solid #8bc6f9;
+}
+
+.settings-btn {
+  background: linear-gradient(to bottom right, #C7E9FF, #A4D4FF);
+  border: #A4D4FF;
+  border-radius: 2px;
+}
+
+.settings-btn:hover {
   background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
 }
 
@@ -75,6 +106,7 @@
 
 .message {
   height: 20px;
+  text-align: center;
 }
 
 .cell:disabled {
