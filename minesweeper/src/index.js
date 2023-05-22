@@ -6,6 +6,7 @@ let size = 10;
 let minesQty = 10;
 let mode = 'light';
 let isSoundOn = true;
+let results = JSON.parse(localStorage.getItem('results')) || [];
 
 const body = document.getElementById('page');
 
@@ -103,7 +104,20 @@ body.append(switchColorModeSelect);
 
 const soundOnBtn = document.createElement('button');
 soundOnBtn.innerHTML = 'sound on';
+soundOnBtn.className ='sound-btn';
 body.append(soundOnBtn);
+
+const lastResults = document.createElement('div');
+lastResults.className = 'last-results';
+lastResults.innerHTML = 'Last results';
+
+for (let i = 0; i < results.length; i++) {
+  const result = document.createElement('p');
+  result.innerHTML = `Date: ${results[i].date} Moves: ${results[i].moves} Time: ${results[i].time} ${results[i].result}`;
+  lastResults.append(result);
+}
+
+body.append(lastResults);
 
 switchColorModeSelect.addEventListener('change', (event) => {
   mode = event.target.value;

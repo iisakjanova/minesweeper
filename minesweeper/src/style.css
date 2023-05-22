@@ -74,7 +74,8 @@
   border-radius: 2px;
 }
 
-.dark-mode .settings-btn {
+.dark-mode .settings-btn,
+.dark-mode .sound-btn {
   background: linear-gradient(to bottom right, #0000CD, #000080);
   color: white;
 }
@@ -83,7 +84,8 @@
   background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
 }
 
-.dark-mode .settings-btn:hover {
+.dark-mode .settings-btn:hover,
+.dark-mode .sound-btn:hover {
   background: linear-gradient(to top left,#0000CD, #000080);
 }
 
@@ -168,4 +170,21 @@
   display: block;
   margin: 0 auto;
   padding: 10px;
+}
+
+.sound-btn {
+  margin: 30px auto 30px auto;
+  display: block;
+  background: linear-gradient(to bottom right, #C7E9FF, #A4D4FF);
+  border: #A4D4FF;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+.sound-btn:hover {
+  background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
+}
+
+.last-results {
+  text-align: center;
 }

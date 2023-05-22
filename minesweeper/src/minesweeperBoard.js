@@ -267,8 +267,32 @@ export default class Minesweeper {
         endGameSound.play();
       }
     }
-    
+
+    let gameResult = this.success ? 'WIN' : 'LOSE';
+
+    const result = {
+      moves: this.counter,
+      time: `${this.duration} sec`,
+      date: new Date().toISOString(),
+      result: gameResult,
+    };
+
+    this.saveResult(result);
   }
+
+  saveResult = (result) => {
+    // Retrieve existing results from localStorage
+    const results = JSON.parse(localStorage.getItem('results')) || [];
+  
+    // Add the new result to the array
+    results.unshift(result);
+  
+    // Truncate the array to keep only the latest 10 results
+    results.length = Math.min(results.length, 10);
+  
+    // Save the updated results array to localStorage
+    localStorage.setItem('results', JSON.stringify(results));
+  };
 
   render = () => {
     this.board = document.createElement('div');
