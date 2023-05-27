@@ -395,6 +395,10 @@ export default class Minesweeper {
         clickSound.play();
       }
       
+      if (!event.target.classList.contains('cell')) {
+        return;
+      }
+      
       const cell = event.target;
       
         if (!cell.disabled) {

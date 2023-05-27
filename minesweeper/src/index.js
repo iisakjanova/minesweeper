@@ -7,6 +7,7 @@ let minesQty = 10;
 let mode = 'light';
 let isSoundOn = true;
 let results = JSON.parse(localStorage.getItem('results')) || [];
+let showResults = false;
 
 const body = document.getElementById('page');
 
@@ -107,17 +108,14 @@ soundOnBtn.innerHTML = 'sound on';
 soundOnBtn.className ='sound-btn';
 body.append(soundOnBtn);
 
+const showLatestResultsBtn = document.createElement('button');
+showLatestResultsBtn.className = 'latest-results-btn';
+showLatestResultsBtn.innerText = 'Latest 10 results';
+body.append(showLatestResultsBtn);
+
 const lastResults = document.createElement('div');
-lastResults.className = 'last-results';
-lastResults.innerHTML = 'Last results';
-
-for (let i = 0; i < results.length; i++) {
-  const result = document.createElement('p');
-  result.innerHTML = `Date: ${results[i].date} Moves: ${results[i].moves} Time: ${results[i].time} ${results[i].result}`;
-  lastResults.append(result);
-}
-
-body.append(lastResults);
+  lastResults.className = 'last-results';
+  body.append(lastResults);
 
 switchColorModeSelect.addEventListener('change', (event) => {
   mode = event.target.value;
@@ -127,7 +125,6 @@ switchColorModeSelect.addEventListener('change', (event) => {
   } else {
     body.classList.remove('dark-mode');
   }
-  
 });
 
 soundOnBtn.addEventListener('click', () => {
@@ -146,6 +143,20 @@ soundOnBtn.addEventListener('click', () => {
   minesweeper = new Minesweeper(container, size, size, minesQty, isSoundOn);
   minesweeper.start();
   
+});
+
+showLatestResultsBtn.addEventListener('click', () => {
+  showResults = !showResults;
+
+  if (showResults) {
+    for (let i = 0; i < results.length; i++) {
+      const result = document.createElement('p');
+      result.innerHTML = `Date: ${results[i].date} Moves: ${results[i].moves} Time: ${results[i].time} ${results[i].result}`;
+      lastResults.append(result);
+    }
+  } else {
+    lastResults.innerHTML = '';
+  }
 });
 
 startBtn.addEventListener('click', () => {

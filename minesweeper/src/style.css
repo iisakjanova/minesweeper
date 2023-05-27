@@ -75,7 +75,8 @@
 }
 
 .dark-mode .settings-btn,
-.dark-mode .sound-btn {
+.dark-mode .sound-btn,
+.dark-mode .latest-results-btn {
   background: linear-gradient(to bottom right, #0000CD, #000080);
   color: white;
 }
@@ -85,7 +86,8 @@
 }
 
 .dark-mode .settings-btn:hover,
-.dark-mode .sound-btn:hover {
+.dark-mode .sound-btn:hover,
+.dark-mode .latest-results-btn:hover {
   background: linear-gradient(to top left,#0000CD, #000080);
 }
 
@@ -172,7 +174,8 @@
   padding: 10px;
 }
 
-.sound-btn {
+.sound-btn,
+.latest-results-btn {
   margin: 30px auto 30px auto;
   display: block;
   background: linear-gradient(to bottom right, #C7E9FF, #A4D4FF);
@@ -181,7 +184,8 @@
   padding: 10px;
 }
 
-.sound-btn:hover {
+.sound-btn:hover,
+.latest-results-btn:hover {
   background: linear-gradient(to top left, #C7E9FF, #A4D4FF);
 }
 
